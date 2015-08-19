@@ -8,7 +8,7 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "RedHat_64",
       "hard_drive_interface": "sata",
-      "headless": "false",
+      "headless": "true",
       "http_directory": "http",
       "iso_checksum": "{{ user `iso_checksum` }}",
       "iso_checksum_type": "sha1",
@@ -39,13 +39,23 @@
       "vm_name": "centos70-docker-etcd"
     }
   ],
-  "post-processors": [
+  "post-processors": [[
+    {
+        "type": "atlas",
+        "only": ["virtualbox-iso"],
+        "artifact": "perljedi/cent7-kube",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+            "provider": "virtualbox",
+            "version": "0.2.5"
+        }
+    },
     {
       "keep_input_artifact": false,
       "output": "box/{{.Provider}}/centos70-docker-{{user `cm`}}{{user `cm_version`}}-{{user `version`}}.box",
       "type": "vagrant"
     }
-  ],
+  ]],
   "provisioners": [
     {
       "environment_vars": [
@@ -97,6 +107,6 @@
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "update": "false",
-    "version": "0.1.0"
+    "version": "0.2.5"
   }
 }
